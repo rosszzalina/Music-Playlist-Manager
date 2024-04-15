@@ -1,0 +1,109 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <stdexcept>
+
+// Enum to represent days of the week
+enum DayOfWeek {
+    Sunday,
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday
+};
+
+// Structure to represent Date
+struct Date {
+    int day, month, year;
+
+    // Constructor to initialize Date
+    Date(int d, int m, int y) : day(d), month(m), year(y) {}
+
+    // Function to check if the date is valid
+    bool isValidDate() const {
+        if (month < 1 || month > 12 || day < 1)
+            return false;
+        int daysInMonth[] = {31, 28 + isLeapYear(year), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        return day <= daysInMonth[month - 1];
+    }
+
+    // Function to update date
+    void newDate(int d, int m, int y) {
+        day = d;
+        month = m;
+        year = y;
+    }
+
+    // Function to calculate day of the week
+    DayOfWeek getDayOfWeek() const {
+        static int t[] = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
+        year -= month < 3;
+        int dayOfWeek = (year + year / 4 - year / 100 + year / 400 + t[month - 1] + day) % 7;
+        return static_cast<DayOfWeek>(dayOfWeek);
+    }
+
+    // Function to calculate difference in days between two dates
+    int calculateDifference(const Date& other) const {
+        if (!isValidDate() || !other.isValidDate())
+            throw std::invalid_argument("Invalid date");
+        int days1 = year * 365 + dayOfYear();
+        int days2 = other.year * 365 + other.dayOfYear();
+        return std::abs(days1 - days2);
+    }
+
+    // Function to print date in readable format
+    void printDate() const {
+        const char* monthNames[] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        std::cout << monthNames[month - 1] << " " << day << ", " << year;
+    }
+
+    // Comparison operator
+    bool operator<(const Date& other) const {
+        if (year != other.year) return year < other.year;
+        if (month != other.month) return month < other.month;
+        return day < other.day;
+    }
+
+private:
+    // Function to check if a year is a leap year
+    static int isLeapYear(int year) {
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+    }
+
+    // Function to calculate day of the year
+    int dayOfYear() const {
+        int daysInMonth[] = {31, 28 + isLeapYear(year), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        int totalDays = 0;
+        for (int i = 0; i < month - 1; ++i)
+            totalDays += daysInMonth[i];
+        totalDays += day;
+        return totalDays;
+    }
+};
+
+// Sorting function to sort vector of Date objects
+void sortDates(std::vector<Date>& dates) {
+    std::sort(dates.begin(), dates.end());
+}
+
+int main() {
+    std::vector<Date> dates = {
+        {25, 12, 2023},
+        {15, 7, 2024},
+        {5, 5, 2023},
+        {20, 10, 2023}
+    };
+
+    // Sort the dates
+    sortDates(dates);
+
+    // Print sorted dates
+    for (const auto& date : dates) {
+        date.printDate();
+        std::cout << std::endl;
+    }
+
+    return 0;
+}
