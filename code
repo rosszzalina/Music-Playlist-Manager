@@ -1,109 +1,224 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <stdexcept>
-
-// Enum to represent days of the week
-enum DayOfWeek {
-    Sunday,
-    Monday,
-    Tuesday,
-    Wednesday,
-    Thursday,
-    Friday,
-    Saturday
+#include <bits/stdc++.h>
+using namespace std;
+// Define a structure for a song
+struct Song {
+    string title;
+    string artist;
+    string album;
+    int year;
 };
 
-// Structure to represent Date
-struct Date {
-    int day, month, year;
+// structure for a playlist
+struct Playlist {
+    string name;
+    vector<Song> songs;
+};
 
-    // Constructor to initialize Date
-    Date(int d, int m, int y) : day(d), month(m), year(y) {}
-
-    // Function to check if the date is valid
-    bool isValidDate() const {
-        if (month < 1 || month > 12 || day < 1)
-            return false;
-        int daysInMonth[] = {31, 28 + isLeapYear(year), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-        return day <= daysInMonth[month - 1];
-    }
-
-    // Function to update date
-    void newDate(int d, int m, int y) {
-        day = d;
-        month = m;
-        year = y;
-    }
-
-    // Function to calculate day of the week
-    DayOfWeek getDayOfWeek() const {
-        static int t[] = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
-        year -= month < 3;
-        int dayOfWeek = (year + year / 4 - year / 100 + year / 400 + t[month - 1] + day) % 7;
-        return static_cast<DayOfWeek>(dayOfWeek);
-    }
-
-    // Function to calculate difference in days between two dates
-    int calculateDifference(const Date& other) const {
-        if (!isValidDate() || !other.isValidDate())
-            throw std::invalid_argument("Invalid date");
-        int days1 = year * 365 + dayOfYear();
-        int days2 = other.year * 365 + other.dayOfYear();
-        return std::abs(days1 - days2);
-    }
-
-    // Function to print date in readable format
-    void printDate() const {
-        const char* monthNames[] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-        std::cout << monthNames[month - 1] << " " << day << ", " << year;
-    }
-
-    // Comparison operator
-    bool operator<(const Date& other) const {
-        if (year != other.year) return year < other.year;
-        if (month != other.month) return month < other.month;
-        return day < other.day;
-    }
-
+// class for managing playlists
+class PlaylistManager {
 private:
-    // Function to check if a year is a leap year
-    static int isLeapYear(int year) {
-        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+    vector<Playlist> playlists;
+
+public:
+    // function to create a new playlist
+    void createPlaylist(const string& name) {
+        Playlist newPlaylist;
+        newPlaylist.name = name;
+        playlists.push_back(newPlaylist);
+        cout << "Playlist created successfully." << endl;
     }
 
-    // Function to calculate day of the year
-    int dayOfYear() const {
-        int daysInMonth[] = {31, 28 + isLeapYear(year), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-        int totalDays = 0;
-        for (int i = 0; i < month - 1; ++i)
-            totalDays += daysInMonth[i];
-        totalDays += day;
-        return totalDays;
+    // function to add a song to a playlist
+    void addSongToPlaylist(const string& playlistName, const Song& song) {
+        for (auto& playlist : playlists) {
+            if (playlist.name == playlistName) {
+                playlist.songs.push_back(song);
+                cout << "Song added to playlist successfully." << endl;
+                return;
+            }
+        }
+        cout << "Playlist not found." << endl;
+    }
+
+    // Function to remove a song from a playlist
+    void removeSongFromPlaylist(const string& playlistName, const string& songTitle) {
+        for (auto& playlist : playlists) {
+            if (playlist.name == playlistName) {
+                for (auto it = playlist.songs.begin(); it != playlist.songs.end(); ++it) {
+                    if (it->title == songTitle) {
+                        playlist.songs.erase(it);
+                        cout << "Song removed from playlist successfully." << endl;
+                        return;
+                    }
+                }
+                cout << "Song not found in playlist." << endl;
+                return;
+            }
+        }
+        cout << "Playlist not found." << endl;
+    }
+
+    // Function to display songs in a playlist
+    void displayPlaylist(const string& playlistName) {
+        for (const auto& playlist : playlists) {
+            if (playlist.name == playlistName) {
+                if (playlist.songs.empty()) {
+                    cout << "No songs in playlist." << endl;
+                } else {
+                    cout << "Songs in playlist '" << playlist.name << "':" << endl;
+                    for (const auto& song : playlist.songs) {
+                        cout << "Title: " << song.title << ", Artist: " << song.artist << ", Album: " << song.album << ", Year: " << song.year << endl;
+                    }
+                }
+                return;
+            }
+        }
+        cout << "Playlist not found." << endl;
+    }
+
+    // Function to delete a playlist
+    void deletePlaylist(const string& playlistName) {
+        for (auto it = playlists.begin(); it != playlists.end(); ++it) {
+            if (it->name == playlistName) {
+                playlists.erase(it);
+                cout << "Playlist deleted successfully." << endl;
+                return;
+            }
+        }
+        cout << "Playlist not found." << endl;
+    }
+
+    // Function to save playlists to a file
+    void saveToFile(const string& filename) {
+        ofstream outFile(filename);
+        if (outFile.is_open()) {
+            for (const auto& playlist : playlists) {
+                outFile << playlist.name << endl;
+                for (const auto& song : playlist.songs) {
+                    outFile << song.title << "," << song.artist << "," << song.album << "," << song.year << endl;
+                }
+                outFile << endl;
+            }
+            cout << "Playlists saved to file." << endl;
+        } else {
+            cout << "Unable to open file." << endl;
+        }
+    }
+
+    // Function to load playlists from a file
+    void loadFromFile(const string& filename) {
+        ifstream inFile(filename);
+        if (inFile.is_open()) {
+            playlists.clear(); // Clear existing playlists
+            string line;
+            while (getline(inFile, line)) {
+                Playlist newPlaylist;
+                newPlaylist.name = line;
+                while (getline(inFile, line) && !line.empty()) {
+                    stringstream ss(line);
+                    string title, artist, album, yearStr;
+                    int year;
+                    getline(ss, title, ',');
+                    getline(ss, artist, ',');
+                    getline(ss, album, ',');
+                    getline(ss, yearStr);
+                    year = stoi(yearStr); // Convert year string to integer
+                    newPlaylist.songs.push_back({title, artist, album, year});
+                }
+                playlists.push_back(newPlaylist);
+            }
+            cout << "Playlists loaded from file." << endl;
+        } else {
+            cout << "Unable to open file." << endl;
+        }
     }
 };
 
-// Sorting function to sort vector of Date objects
-void sortDates(std::vector<Date>& dates) {
-    std::sort(dates.begin(), dates.end());
+// Function to handle user interactions
+void managePlaylists() {
+    PlaylistManager manager;
+
+    // Load playlists from file if it exists
+    manager.loadFromFile("playlists.txt");
+
+    while (true) {
+        cout << "\nMusic Playlist Manager\n";
+        cout << "1. Create Playlist\n";
+        cout << "2. Add Song to Playlist\n";
+        cout << "3. Remove Song from Playlist\n";
+        cout << "4. Display Playlist\n";
+        cout << "5. Delete Playlist\n";
+        cout << "6. Exit\n";
+        cout << "Enter your choice: ";
+
+        int choice;
+        cin >> choice;
+
+        switch (choice) {
+            case
+
+ 1: {
+                string name;
+                cout << "Enter name of the playlist: ";
+                cin.ignore();
+                getline(cin, name);
+                manager.createPlaylist(name);
+                break;
+            }
+            case 2: {
+                string playlistName, title, artist, album;
+                int year;
+                cout << "Enter name of the playlist: ";
+                cin.ignore();
+                getline(cin, playlistName);
+                cout << "Enter title of the song: ";
+                getline(cin, title);
+                cout << "Enter artist of the song: ";
+                getline(cin, artist);
+                cout << "Enter album of the song: ";
+                getline(cin, album);
+                cout << "Enter year of the song: ";
+                cin >> year;
+                manager.addSongToPlaylist(playlistName, {title, artist, album, year});
+                break;
+            }
+            case 3: {
+                string playlistName, title;
+                cout << "Enter name of the playlist: ";
+                cin.ignore();
+                getline(cin, playlistName);
+                cout << "Enter title of the song to remove: ";
+                getline(cin, title);
+                manager.removeSongFromPlaylist(playlistName, title);
+                break;
+            }
+            case 4: {
+                string playlistName;
+                cout << "Enter name of the playlist: ";
+                cin.ignore();
+                getline(cin, playlistName);
+                manager.displayPlaylist(playlistName);
+                break;
+            }
+            case 5: {
+                string playlistName;
+                cout << "Enter name of the playlist to delete: ";
+                cin.ignore();
+                getline(cin, playlistName);
+                manager.deletePlaylist(playlistName);
+                break;
+            }
+            case 6:
+                cout << "Exiting program. Goodbye!";
+                return;
+            default:
+                cout << "Invalid choice. Please try again";
+        }
+    }
 }
 
 int main() {
-    std::vector<Date> dates = {
-        {25, 12, 2023},
-        {15, 7, 2024},
-        {5, 5, 2023},
-        {20, 10, 2023}
-    };
-
-    // Sort the dates
-    sortDates(dates);
-
-    // Print sorted dates
-    for (const auto& date : dates) {
-        date.printDate();
-        std::cout << std::endl;
-    }
-
+    managePlaylists();
     return 0;
 }
+
