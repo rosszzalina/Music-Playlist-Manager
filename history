@@ -1,0 +1,199 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+// Define a structure for a song
+struct Song {
+string title;
+string artist;
+string album;
+int year;
+};
+
+// structure for a playlist
+struct Playlist {
+string name;
+vector<Song> songs;
+};
+
+// class for managing playlists
+class PlaylistManager {
+private:
+vector<Playlist> playlists;
+
+public:
+// function to create a new playlist
+void createPlaylist(const string& name) {
+Playlist newPlaylist;
+newPlaylist.name = name;
+playlists.push_back(newPlaylist);
+cout << "Playlist created successfully." << endl;
+}
+
+// function to add a song to a playlist
+void addSongToPlaylist(const string& playlistName, const Song& song) {
+for (auto& playlist : playlists) {
+if (playlist.name == playlistName) {
+playlist.songs.push_back(song);
+cout << "Song is added to playlist." << endl;
+return;
+}
+}
+cout << "Playlist not found." << endl;
+}
+
+// Function to display songs in a playlist
+void displayPlaylist(const string& playlistName) {
+for (const auto& playlist : playlists) {
+if (playlist.name == playlistName) {
+if (playlist.songs.empty()) {
+    cout << "No songs in playlist." << endl;
+} else {
+    cout << "Songs in playlist '" << playlist.name << "':" << endl;
+    for (const auto& song : playlist.songs) {
+        cout << "Title: " << song.title << ", Artist: " << song.artist << ", Album: " << song.album << ", Year: " << song.year << endl;
+    }
+}
+return;
+}
+}
+cout << "Playlist not found." << endl;
+}
+
+// Function to delete a playlist
+void deletePlaylist(const string& playlistName) {
+for (auto it = playlists.begin(); it != playlists.end(); ++it) {
+if (it->name == playlistName) {
+playlists.erase(it);
+cout << "Playlist deleted successfully." << endl;
+return;
+}
+}
+cout << "Playlist not found." << endl;
+}
+
+// Function to save playlists to a file
+void saveToFile(const string& filename) {
+ofstream outFile(filename);
+if (outFile.is_open()) {
+for (const auto& playlist : playlists) {
+outFile << playlist.name << endl;
+for (const auto& song : playlist.songs) {
+    outFile << song.title << "," << song.artist << "," << song.album << "," << song.year << endl;
+}
+outFile << endl;
+}
+cout << "Playlists saved to file." << endl;
+} else {
+cout << "Unable to open file." << endl;
+}
+}
+
+// Function to load playlists from a file
+void loadFromFile(const string& filename) {
+ifstream inFile(filename);
+if (inFile.is_open()) {
+playlists.clear(); // Clear existing playlists
+string line;
+while (getline(inFile, line)) {
+Playlist newPlaylist;
+newPlaylist.name = line;
+while (getline(inFile, line) && !line.empty()) {
+    stringstream ss(line);
+    string title, artist, album, yearStr;
+    int year;
+    getline(ss, title, ',');
+    getline(ss, artist, ',');
+    getline(ss, album, ',');
+    getline(ss, yearStr);
+    year = stoi(yearStr); // Convert year string to integer
+    newPlaylist.songs.push_back({title, artist, album, year});
+}
+playlists.push_back(newPlaylist);
+}
+cout << "Playlists loaded from file." << endl;
+} else {
+cout << "Unable to open file." << endl;
+}
+}
+};
+
+// Function to handle user interactions
+void managePlaylists() {
+PlaylistManager manager;
+
+// Load playlists from file if it exists
+manager.loadFromFile("playlists.txt");
+
+cout<<" Music Playlist Manager"<<endl;
+while (true) {
+cout << "\n Music Playlist Manager \n";
+cout << "1. Create Playlist\n";
+cout << "2. Add Song to Playlist\n";
+cout << "3. Display Playlist\n";
+cout << "4. Delete Playlist\n";
+cout << "5. Exit\n";
+cout << "Enter your choice: ";
+
+int choice;
+cin >> choice;
+
+switch (choice) {
+case 1: {
+string name;
+cout << "Enter name of the playlist: ";
+cin.ignore();
+getline(cin, name);
+manager.createPlaylist(name);
+break;
+}
+case 2: {
+string playlistName, title, artist, album;
+int year;
+cout << "Enter name of the playlist: ";
+cin.ignore();
+getline(cin, playlistName);
+cout << "Enter title of the song: ";
+getline(cin, title);
+cout << "Enter artist of the song: ";
+getline(cin, artist);
+cout << "Enter album of the song: ";
+getline(cin, album);
+cout << "Enter year of the song: ";
+cin >> year;
+manager.addSongToPlaylist(playlistName, {title, artist, album, year});
+break;
+}
+case 3: {
+string playlistName;
+cout << "Enter name of the playlist: ";
+cin.ignore();
+getline(cin, playlistName);
+manager.displayPlaylist(playlistName);
+break;
+}
+case 4: {
+string playlistName;
+cout << "Enter name of the playlist to delete: ";
+cin.ignore();
+getline(cin, playlistName);
+manager.deletePlaylist(playlistName);
+break;
+}
+case 5:
+manager.saveToFile("playlists.txt");
+cout << "See you later. Goodbye!";
+return;
+default:
+cout << "Wrong. Please try again";
+}
+}
+}
+int main() {
+managePlaylists();
+ return 0;
+}
