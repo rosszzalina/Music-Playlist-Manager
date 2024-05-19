@@ -50,7 +50,14 @@ Algorithms and Data Structures:
 - Load Playlists from File: Loads the playlists and songs from playlist_data.txt if it exists, ensuring data persistence between sessions.
 
 
-  	Screenshot:
+  	Screenshots:
 
   
-![Снимок экрана 2024-05-17 143144](https://github.com/rosszzalina/date-structure/assets/150505816/e826bbfb-d1a5-4ef5-b62e-d61fab87f721)
+![Снимок экрана 2024-05-17 143144](https://github.com/rosszzalina/date-structure/assets/150505816/e826bbfb-d1a5-4ef5-b62e-d61fab87f721) 
+
+
+
+![Снимок экрана 2024-05-20 023134](https://github.com/rosszzalina/Music-Playlist-Manager/assets/150505816/637e8958-6aa8-4808-b551-8291ba7b59e3)
+
+
+
