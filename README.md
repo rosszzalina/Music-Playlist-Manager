@@ -2,7 +2,9 @@
 
 	Description:
 The Music Playlist Manager is a software application designed to organize and manage a collection of music playlists. It provides users with functionalities to create new playlists, add songs to existing playlists, remove songs from playlists, display all playlists.It makes listening music more convenient and easier.
-	Objectives:
+	
+	
+  	Objectives:
 Efficient Playlist Management: Provide functionalities to create, update, remove, and display playlists.
 Persistent Storage: Implement mechanisms to save the playlist data to a file and load it from a file, ensuring data persistence across multiple sessions.
 User-Friendly Interface: Create a simple and intuitive text-based interface for users to interact with the system.
@@ -14,9 +16,12 @@ Playlist Representation: Each playlist contains a list of songs, and playlists t
 User Interface: A straightforward command-line interface is provided for interaction, enabling users to easily navigate through playlist management options.
 
 Algorithms and Data Structures:
-	Data Structures: 
+	
+ 	Data Structures: 
 - Vector or map to store playlists, where each playlist contains a list of songs.
 - Struct or class to represent song entities, containing attributes such as title, artist, album, and duration.
+
+
 
 	Algorithms:
 - Add Playlist: Creates a new playlist and adds it to the collection of playlists.
@@ -29,7 +34,9 @@ Algorithms and Data Structures:
 2. Navigate to the directory containing music_playlist_manager.cpp.
 3. Compile the code using a C++ compiler, e.g., g++ -o music_playlist_manager music_playlist_manager.cpp.
 
-Execution:
+	
+ 	Execution:
+
 1. Run the compiled program, e.g., ./music_playlist_manager.
 2. Follow the on-screen instructions to interact with the music playlist management system.
 3. Ensure that playlist_data.txt exists in the same directory to load the playlist data on start. The file will also be used to save the playlist data.
@@ -42,7 +49,8 @@ Execution:
 - Save Playlists to File: Saves the current state of playlists and songs to playlist_data.txt.
 - Load Playlists from File: Loads the playlists and songs from playlist_data.txt if it exists, ensuring data persistence between sessions.
 
-  Screenshot:
+
+  	Screenshot:
 
   
 ![Снимок экрана 2024-05-17 143144](https://github.com/rosszzalina/date-structure/assets/150505816/e826bbfb-d1a5-4ef5-b62e-d61fab87f721)
