@@ -50,6 +50,9 @@ Algorithms and Data Structures:
 - Load Playlists from File: Loads the playlists and songs from playlist_data.txt if it exists, ensuring data persistence between sessions.
 
 
+https://www.canva.com/design/DAGFukR3Z58/2sj9pCo_0RK6QDRx_J5Gcg/edit?utm_content=DAGFukR3Z58&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+
+
   	Screenshots:
 
   
