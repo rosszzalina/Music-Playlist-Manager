@@ -1,5 +1,8 @@
 # Music Playlist Manager.
 
+https://www.canva.com/design/DAGFukR3Z58/2sj9pCo_0RK6QDRx_J5Gcg/edit?utm_content=DAGFukR3Z58&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+
+
 ### Description:
 The Music Playlist Manager is a software application designed to organize and manage a collection of music playlists. It provides users with functionalities to create new playlists, add songs to existing playlists, remove songs from playlists, display all playlists.It makes listening music more convenient and easier.
 	
@@ -50,7 +53,6 @@ User Interface: A straightforward command-line interface is provided for interac
 - Load Playlists from File: Loads the playlists and songs from playlist_data.txt if it exists, ensuring data persistence between sessions.
 
 
-https://www.canva.com/design/DAGFukR3Z58/2sj9pCo_0RK6QDRx_J5Gcg/edit?utm_content=DAGFukR3Z58&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 
 
   ## Screenshots:
