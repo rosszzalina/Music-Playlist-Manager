@@ -26,12 +26,6 @@ User Interface: A straightforward command-line interface is provided for interac
 
 
 
-### Algorithms:
-- Add Playlist: Creates a new playlist and adds it to the collection of playlists.
-- Add Song to Playlist: Searches for the specified playlist and adds the song to its list of songs.
-- Remove Song from Playlist: Locates the specified song in the playlist and removes it.
-- Display Playlists: Iterates through the collection of playlists and prints each playlist's details along with its songs.
-
 ### Compilation:
 1. Open a terminal or command prompt.
 2. Navigate to the directory containing music_playlist_manager.cpp.
@@ -49,8 +43,6 @@ User Interface: A straightforward command-line interface is provided for interac
 - Add Song to Playlist: Specify the playlist and provide song details (title, artist, album, duration) to add a song.
 - Remove Song from Playlist: Select the playlist and enter the song details (title, artist) to remove it from the playlist.
 - Display Playlists: Shows the list of all playlists along with their respective songs.
-- Save Playlists to File: Saves the current state of playlists and songs to playlist_data.txt.
-- Load Playlists from File: Loads the playlists and songs from playlist_data.txt if it exists, ensuring data persistence between sessions.
 
 
 
