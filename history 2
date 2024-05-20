@@ -1,0 +1,238 @@
+#include <bits/stdc++.h>
+using namespace std; 
+// Define a structure for a song
+struct Song {
+    string title;   
+    string artist;  
+    string album;  
+    int year;      
+};
+
+// Structure for a playlist
+struct Playlist {
+    string name;        // Name of the playlist
+    vector<Song> songs; // Vector to store songs in the playlist
+};
+
+// Class for managing playlists
+class PlaylistManager {
+private:
+    vector<Playlist> playlists; // Vector to store playlists
+
+public:
+    // Function to create a new playlist
+    void createPlaylist(const string& name) {
+        Playlist newPlaylist;   // Create a new playlist object
+        newPlaylist.name = name; // Set the name of the new playlist
+        playlists.push_back(newPlaylist); // Add the new playlist to the vector
+        cout << "Playlist created successfully." << endl; 
+    }
+
+    // Function to add a song to a playlist
+    void addSongToPlaylist(const string& playlistName, const Song& song) {
+        for (auto& playlist : playlists) {
+            if (playlist.name == playlistName) { // Check if the playlist exists
+                playlist.songs.push_back(song); // Add the song to the playlist
+                cout << "Song added to playlist successfully." << endl; 
+                return;
+            }
+        }
+        cout << "Playlist not found." << endl; 
+    }
+
+    // Function to remove a song from a playlist
+    void removeSongFromPlaylist(const string& playlistName, const string& songTitle) {
+        for (auto& playlist : playlists) {
+            if (playlist.name == playlistName) { // Check if the playlist exists
+                for (auto it = playlist.songs.begin(); it != playlist.songs.end(); ++it) {
+                    if (it->title == songTitle) { // Check if the song exists in the playlist
+                        playlist.songs.erase(it); // Remove the song from the playlist
+                        cout << "Song removed from playlist successfully." << endl; // Inform user
+                        return;
+                    }
+                }
+                cout << "Song not found in playlist." << endl; // Inform user if song doesn't exist
+                return;
+            }
+        }
+        cout << "Playlist not found." << endl; // Inform user if playlist doesn't exist
+    }
+
+    // Function to display songs in a playlist
+    void displayPlaylist(const string& playlistName) {
+        for (const auto& playlist : playlists) {
+            if (playlist.name == playlistName) { // Check if the playlist exists
+                if (playlist.songs.empty()) {
+                    cout << "No songs in playlist." << endl; // Inform user if playlist is empty
+                } else {
+                    cout << "Songs in playlist '" << playlist.name << "':" << endl;
+                    for (const auto& song : playlist.songs) {
+                        cout << "Title: " << song.title << ", Artist: " << song.artist << ", Album: " << song.album << ", Year: " << song.year << endl;
+                    }
+                }
+                return;
+            }
+        }
+        cout << "Playlist not found." << endl; // Inform user if playlist doesn't exist
+    }
+
+    // Function to delete a playlist
+    void deletePlaylist(const string& playlistName) {
+        for (auto it = playlists.begin(); it != playlists.end(); ++it) {
+            if (it->name == playlistName) { // Check if the playlist exists
+                playlists.erase(it); // Remove the playlist from the vector
+                cout << "Playlist deleted successfully." << endl; // Inform user
+                return;
+            }
+        }
+        cout << "Playlist not found." << endl; // Inform user if playlist doesn't exist
+    }
+
+    // Function to save playlists to a file
+    void saveToFile(const string& filename) {
+        ofstream outFile(filename); // Open file for writing
+        if (outFile.is_open()) {
+            for (const auto& playlist : playlists) {
+                outFile << playlist.name << endl; // Write playlist name to file
+                for (const auto& song : playlist.songs) {
+                    outFile << song.title << "," << song.artist << "," << song.album << "," << endl; // Write song details to file
+                }
+                outFile << endl; // Separate playlists with empty line
+            }
+            cout << "Playlists saved to file." << endl; // Inform user
+        } else {
+            cout << "Unable to open file." << endl; // Inform user if file cannot be opened
+        }
+    }
+
+    // Function to load playlists from a file
+    void loadFromFile(const string& filename) {
+        ifstream inFile(filename); // Open file for reading
+        if (inFile.is_open()) {
+            playlists.clear(); // Clear existing playlists
+            string line;
+            while (getline(inFile, line)) {
+                Playlist newPlaylist;
+                newPlaylist.name = line; // Read playlist name
+                while (getline(inFile, line) && !line.empty()) {
+                    stringstream ss(line);
+                    string title, artist, album, yearStr;
+                    int year;
+                    getline(ss, title, ',');
+                    getline(ss, artist, ',');
+                    getline(ss, album, ',');
+                    newPlaylist.songs.push_back({title, artist, album}); // Add song to playlist
+                }
+                playlists.push_back(newPlaylist); // Add playlist to vector
+            }
+            cout << "Playlists loaded from file." << endl; 
+        } else {
+            cout << "Unable to open file." << endl; 
+        }
+    }
+
+    // Function to offer trending music
+    void offerTrendingMusic() const {
+        // Trending playlist could be implemented as a constant
+        const Playlist trendingPlaylist = {"Trending Hits", {
+            {"'Espresso'", "Sabrina Carpenter", "single"},
+            {"'I can do i with a broken heart'", "Taylor Swift", "TTPD"},
+            {"'greedy'", "Tate McRae", "single"},
+            {"'Water'" , "Tyla" , "single"},
+            {"'I wanna be yours'" , "Arctic Monkeys" , "AM"}
+        }};
+        cout << "Trending Hits:" << endl; // Display the name of the trending playlist
+        for (const auto& song : trendingPlaylist.songs) {
+            cout << "Title: " << song.title << ", Artist: " << song.artist << ", Album: " << song.album << endl; // Display song details
+        }
+    }
+};
+
+// Function to handle user interactions
+void managePlaylists() {
+    PlaylistManager manager;
+
+    // Load playlists from file if it exists
+    manager.loadFromFile("playlists.txt");
+ cout<<"Welcome to the Spotify - Music Playlist Manager"<<endl;
+    while (true) {
+        cout << "\n Spotify\n";
+        cout << "1. Create Playlist\n";
+        cout << "2. Add Song to Playlist\n";
+        cout << "3. Remove Song from Playlist\n";
+        cout << "4. Display Playlist\n";
+        cout << "5. Delete Playlist\n";
+        cout << "6. Offering Trending Music\n";
+        cout << "7. Exit\n";
+        cout << "Enter your choice: ";
+
+        int choice;
+        cin >> choice;
+
+        switch (choice) {
+            case 1: {
+                string name;
+                cout << "Enter name of the playlist: ";
+                cin.ignore();
+                getline(cin, name);
+                manager.createPlaylist(name);
+                break;
+            }
+            case 2: {
+                string playlistName, title, artist, album;
+                cout << "Enter name of the playlist: ";
+                cin.ignore();
+                getline(cin, playlistName);
+                cout << "Enter title of the song: ";
+                getline(cin, title);
+                cout << "Enter artist of the song: ";
+                getline(cin, artist);
+                cout << "Enter album of the song: ";
+                getline(cin, album);
+                manager.addSongToPlaylist(playlistName, {title, artist, album});
+                break;
+            }
+            case 3: {
+                string playlistName, title;
+                cout << "Enter name of the playlist: ";
+                cin.ignore();
+                getline(cin, playlistName);
+                cout << "Enter title of the song to remove: ";
+                getline(cin, title);
+                manager.removeSongFromPlaylist(playlistName, title);
+                break;
+            }
+            case 4: {
+                string playlistName;
+                cout << "Enter name of the playlist: ";
+                cin.ignore();
+                getline(cin, playlistName);
+                manager.displayPlaylist(playlistName);
+                break;
+            }
+            case 5: {
+                string playlistName;
+                cout << "Enter name of the playlist to delete: ";
+                cin.ignore();
+                getline(cin, playlistName);
+                manager.deletePlaylist(playlistName);
+                break;
+            }
+            case 6: {
+                manager.offerTrendingMusic();
+                break;
+            }
+            case 7:
+                manager.saveToFile("playlists.txt");
+                cout << "See you later. Goodbye!";
+                return;
+            default:
+                cout << "Invalid choice. Please try again";
+        }
+    }
+}
+
+int main() {
+    managePlaylists();
+    return 0;
+}
